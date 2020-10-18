@@ -26,5 +26,16 @@ namespace MvcCourse.Controllers
 
             return View();
         }
+        
+        /// <summary>
+        /// 新建test頁面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Test()
+        {
+            ViewBag.Message = "Your Test page.";
+
+            return View();
+        }       
     }
 }
