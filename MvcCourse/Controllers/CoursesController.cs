@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MvcCourse.Models;
+using MvcCourse.Models.ViewModels;
+using Omu.ValueInjecter;
 
 namespace MvcCourse.Controllers
 {
@@ -17,6 +19,7 @@ namespace MvcCourse.Controllers
         // GET: Courses
         public ActionResult Index()
         {
+            // 關聯用include
             var courses = db.Courses.Include(c => c.Department);
             return View(courses.ToList());
         }
@@ -46,13 +49,18 @@ namespace MvcCourse.Controllers
         // POST: Courses/Create
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
+        // [Bind(Include = "CourseID,Title,Credits,DepartmentID")] 只有這些欄位要binding
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseID,Title,Credits,DepartmentID")] Course course)
+        public ActionResult Create(CourseCreateOrEdit course)
         {
             if (ModelState.IsValid)
             {
-                db.Courses.Add(course);
+                var item = db.Courses.Create();
+
+                item.InjectFrom(course);
+
+                db.Courses.Add(item);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -82,11 +90,14 @@ namespace MvcCourse.Controllers
         // 詳細資訊，請參閱 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CourseID,Title,Credits,DepartmentID")] Course course)
+        public ActionResult Edit(CourseCreateOrEdit course)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(course).State = EntityState.Modified;
+                var item = db.Courses.Find(course.CourseID);
+                item.InjectFrom(course);
+                
+                //db.Entry(course).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

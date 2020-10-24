@@ -18,6 +18,9 @@
             @Html.DisplayNameFor(model => model.Credits)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Memo)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Department.Name)
         </th>
         <th></th>
@@ -32,12 +35,15 @@
             @Html.DisplayFor(modelItem => item.Credits)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Memo)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Department.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CourseID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CourseID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CourseID })
+            @Html.ActionLink("Edit", "Edit", new { id = item.CourseID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.CourseID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.CourseID })
         </td>
     </tr>
 }
